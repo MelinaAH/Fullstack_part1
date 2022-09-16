@@ -1,0 +1,18 @@
+title 
+
+note over selain: 
+js-tiedosoton sisältämä tapahtumakäsittelijä 
+hoitaa lomakkeen lähettämisen: 
+luo muistiinpanon, lisää sen muistiinpanojen listalle, 
+piirtää ruudun uudelleen (muistiinpanojen listan) ja 
+lähettää uuden muistiinpanon palvelimelle.
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin: 
+Selain muuntaa saamansa 
+json-merkkijonon JavaScript-objektiksi
+end note
+
+palvelin-->selain: Status code 201 (created)
