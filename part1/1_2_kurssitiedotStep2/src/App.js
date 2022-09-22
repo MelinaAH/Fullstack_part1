@@ -25,9 +25,13 @@ const Part = (props) => {
   }
 
   const Total = (props) => {
+    const sum1 = props.parts[0].exercises;
+    const sum2 = props.parts[1].exercises;
+    const sum3 = props.parts[2].exercises
+
     return (
       <div>
-        <p>Number of exercises {props.total} </p>
+        <p>Number of exercises {sum1 + sum2 +sum3}</p>
       </div>
     )
   }
