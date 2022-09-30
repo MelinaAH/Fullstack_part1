@@ -1,10 +1,21 @@
+const Total = ({ parts }) => {
+  const total = parts.reduce((prev, curr) => prev + curr.exercises, 0);
+
+  return (
+    <div>
+      <p><b>total of {total} exercises</b></p>
+    </div>
+  )
+}
+
 const Part = ({ parts }) => {
   console.log('part:', parts);
 
   return (
     <div>
-      {parts.map(part => 
+      {parts.map(part =>
         <p key={part.id}>{part.name} {part.exercises}</p>)}
+      <Total parts={parts} />
     </div>
   )
 }
