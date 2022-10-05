@@ -5,6 +5,7 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]) 
   const [newName, setNewName] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,16 +17,23 @@ const App = () => {
     else {
       console.log('tuleeko tähän?');
       const nameObject = {
-        name: newName
+        name: newName,
+        number: phoneNumber
       }
       setPersons(persons.concat(nameObject));
       setNewName('');
+      setPhoneNumber('');
     }
   }
 
-  const handleInputField = (e) => {
-    console.log('input', e.target.value);
+  const handleNameFiled = (e) => {
+    console.log('input name:', e.target.value);
     setNewName(e.target.value);
+  }
+
+  const handleNumberField = (e) => {
+    console.log('input number:', e.target.value);
+    setPhoneNumber(e.target.value);
   }
 
   return (
@@ -33,14 +41,19 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name: <input value={newName} onChange={handleInputField} />
+          name: <input value={newName} onChange={handleNameFiled} />
+        </div>
+        <div>
+          number: <input value={phoneNumber} onChange={handleNumberField} />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <div>debug: {newName}</div>
+      {persons.map(person => 
+        <p key={person.name}>{person.name} {person.number}</p>
+      )}
     </div>
   )
 
