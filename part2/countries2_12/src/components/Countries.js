@@ -1,7 +1,24 @@
+import { useState, React } from 'react';
+
 const Countries = ({ countries, countryToSearch }) => {
+    const [countryName, setCountryName] = useState('');
+
     const results = countries.filter((country) => {
-        return country.name.common.toLowerCase().includes(countryToSearch)
-    })
+        if (countryName !== '') {
+            console.log(countryName);
+            return country.name.common.toLowerCase().includes(countryName)
+        }
+        else {
+            return country.name.common.toLowerCase().includes(countryToSearch)
+        }
+    });
+
+    console.log('show results', results);
+
+    function handleClick(name) {
+        setCountryName(name.toLowerCase());
+        console.log(name);
+    }
 
     if (countryToSearch === '') {
         return (
@@ -19,7 +36,9 @@ const Countries = ({ countries, countryToSearch }) => {
         return (
             <div>
                 {results.map((country) => (
-                    <p key={country.capital}>{country.name.common}</p>
+                    <div key={country.capital}>
+                        {country.name.common} <button type='submit' onClick={() => handleClick(country.name.common)}>show</button>
+                    </div>
                 ))}
             </div>
         )
@@ -41,7 +60,6 @@ const Countries = ({ countries, countryToSearch }) => {
                         <p>{country.flag}</p>
                     </div>
                 ))}
-
             </div>
         )
     }
