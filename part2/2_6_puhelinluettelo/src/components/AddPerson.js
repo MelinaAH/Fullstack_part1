@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-const AddPerson = ({ handleSubmit, name, phone }) => {
-    const [newName, setNewName] = useState(name);
-    const [phoneNumber, setPhoneNumber] = useState(phone);
+const AddPerson = ({ handleSubmit }) => {
+    const [newName, setNewName] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
 
     const handleNameField = (e) => {
         setNewName(e.target.value);
