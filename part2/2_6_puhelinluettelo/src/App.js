@@ -3,11 +3,13 @@ import Filter from "./components/Filter"
 import AddPerson from "./components/AddPerson"
 import Persons from "./components/Persons"
 import phonebook from './services/phonebook'
+import Notification from "./components/Notification"
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [nameToSearch, setNameToSearch] = useState('');
   const [showAll, setShowAll] = useState(true);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     phonebook
@@ -20,7 +22,6 @@ const App = () => {
   const handleSubmit = (newName, phoneNumber) => {
     if (persons.some(({ name }) => name === newName)) {
       console.log('Name already exists');
-      // alert(`${newName} is already added to phonebook`);
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         const personToUpdate = persons.find(person => person.name === newName);
         const updatedPerson = { ...personToUpdate, number: phoneNumber };
@@ -28,6 +29,10 @@ const App = () => {
           .updateNumber(updatedPerson)
           .then(changedPerson => {
             setPersons(persons.map(person => person.id !== personToUpdate.id ? person : changedPerson))
+            setMessage(`Updated ${updatedPerson.name}`);
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000);
           })
       }
     }
@@ -43,16 +48,24 @@ const App = () => {
         .createNewPerson(nameObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson));
+          setMessage(`Added ${newName}`);
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000);
         })
     }
   }
 
-  const deletePerson = (id) => {
+  const deletePerson = (id, name) => {
     console.log('Tuleeko deletePerson funktioon?');
     console.log(id);
     phonebook
       .deletePerson(id)
     setPersons(persons.filter(person => person.id !== id));
+    setMessage(`Deleted ${name}`);
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000);
   }
 
   const handleSearch = (searchCriterion) => {
@@ -68,6 +81,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter handleSearch={handleSearch} />
       <h2>Add a new</h2>
       <AddPerson handleSubmit={handleSubmit} />

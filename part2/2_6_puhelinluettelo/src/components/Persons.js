@@ -11,7 +11,7 @@ const Persons = ({ persons, showAll, nameToSearch, deletePerson }) => {
         const nameToDelete = persons.find(person => person.name === name);
         console.log(`Poistettava nimen id, ${nameToDelete.id}`);
         if (window.confirm(`Delete ${name} ?`)) {
-            deletePerson(nameToDelete.id);
+            deletePerson(nameToDelete.id, nameToDelete.name);
         }
     }
 
