@@ -10,6 +10,7 @@ const App = () => {
   const [nameToSearch, setNameToSearch] = useState('');
   const [showAll, setShowAll] = useState(true);
   const [message, setMessage] = useState(null);
+  const [succeeded, setSucceeded] = useState(true);
 
   useEffect(() => {
     phonebook
@@ -32,6 +33,14 @@ const App = () => {
             setMessage(`Updated ${updatedPerson.name}`);
             setTimeout(() => {
               setMessage(null)
+            }, 5000);
+          })
+          .catch(error => {
+            setSucceeded(false);
+            setMessage(`Information of ${newName} has already been removed from server`);
+            setTimeout(() => {
+              setMessage(null)
+              setSucceeded(true);
             }, 5000);
           })
       }
@@ -81,7 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={message} succeeded={succeeded} />
       <Filter handleSearch={handleSearch} />
       <h2>Add a new</h2>
       <AddPerson handleSubmit={handleSubmit} />
