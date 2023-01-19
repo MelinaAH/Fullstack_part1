@@ -1,103 +1,33 @@
-import { useState, useEffect } from 'react'
-import Filter from "./components/Filter"
-import AddPerson from "./components/AddPerson"
-import Persons from "./components/Persons"
-import phonebook from './services/phonebook'
-import Notification from "./components/Notification"
+import axios from 'axios';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import Countries from './components/Countries';
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
-  const [nameToSearch, setNameToSearch] = useState('');
-  const [showAll, setShowAll] = useState(true);
-  const [message, setMessage] = useState(null);
-  const [succeeded, setSucceeded] = useState(true);
+  const [countries, setCountries] = useState([]);
+  const [countryToSearch, setCountryToSearch] = useState('');
 
   useEffect(() => {
-    phonebook
-      .getPersons()
-      .then(initialPhonebook => {
-        setPersons(initialPhonebook)
+    axios
+      .get('https://restcountries.com/v3.1/all')
+      .then(response => {
+        setCountries(response.data);
       })
-  }, [])
+  }, []);
 
-  const handleSubmit = (newName, phoneNumber) => {
-    if (persons.some(({ name }) => name === newName)) {
-      console.log('Name already exists');
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        const personToUpdate = persons.find(person => person.name === newName);
-        const updatedPerson = { ...personToUpdate, number: phoneNumber };
-        phonebook
-          .updateNumber(updatedPerson)
-          .then(changedPerson => {
-            setPersons(persons.map(person => person.id !== personToUpdate.id ? person : changedPerson))
-            setMessage(`Updated ${updatedPerson.name}`);
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000);
-          })
-          .catch(error => {
-            setSucceeded(false);
-            setMessage(`Information of ${newName} has already been removed from server`);
-            setTimeout(() => {
-              setMessage(null)
-              setSucceeded(true);
-            }, 5000);
-          })
-      }
-    }
+  console.log('yhteensä', { countries }, 'maata');
 
-    else {
-      console.log('tuleeko tähän?');
-      const nameObject = {
-        name: newName,
-        number: phoneNumber
-      }
-
-      phonebook
-        .createNewPerson(nameObject)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson));
-          setMessage(`Added ${newName}`);
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000);
-        })
-    }
-  }
-
-  const deletePerson = (id, name) => {
-    console.log('Tuleeko deletePerson funktioon?');
-    console.log(id);
-    phonebook
-      .deletePerson(id)
-    setPersons(persons.filter(person => person.id !== id));
-    setMessage(`Deleted ${name}`);
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000);
-  }
-
-  const handleSearch = (searchCriterion) => {
-    console.log('search crioterion:', searchCriterion);
-    setNameToSearch(searchCriterion);
-    console.log('name to search:', nameToSearch);
-    setShowAll(false);
-    if (searchCriterion === '') {
-      setShowAll(true);
-    }
+  const handleInput = (e) => {
+    console.log(e.target.value);
+    setCountryToSearch(e.target.value.toLowerCase());
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <Notification message={message} succeeded={succeeded} />
-      <Filter handleSearch={handleSearch} />
-      <h2>Add a new</h2>
-      <AddPerson handleSubmit={handleSubmit} />
-      <h2>Numbers</h2>
-      <Persons persons={persons} showAll={showAll} nameToSearch={nameToSearch} deletePerson={deletePerson} />
+      find countries <input value={countryToSearch} onChange={handleInput} />
+      <Countries countries={countries} countryToSearch={countryToSearch} />
     </div>
-  )
+  );
 }
 
 export default App
