@@ -38,6 +38,14 @@ const App = () => {
     }
   }
 
+  const deletePerson = (id) => {
+    console.log('Tuleeko deletePerson funktioon?');
+    console.log(id);
+    phonebook
+      .deletePerson(id)
+    setPersons(persons.filter(person => person.id !== id));
+  }
+
   const handleSearch = (searchCriterion) => {
     console.log('search crioterion:', searchCriterion);
     setNameToSearch(searchCriterion);
@@ -55,7 +63,7 @@ const App = () => {
       <h2>Add a new</h2>
       <AddPerson handleSubmit={handleSubmit} />
       <h2>Numbers</h2>
-      <Persons persons={persons} showAll={showAll} nameToSearch={nameToSearch} />
+      <Persons persons={persons} showAll={showAll} nameToSearch={nameToSearch} deletePerson={deletePerson} />
     </div>
   )
 }
