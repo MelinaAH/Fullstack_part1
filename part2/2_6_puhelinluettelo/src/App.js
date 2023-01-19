@@ -20,7 +20,16 @@ const App = () => {
   const handleSubmit = (newName, phoneNumber) => {
     if (persons.some(({ name }) => name === newName)) {
       console.log('Name already exists');
-      alert(`${newName} is already added to phonebook`);
+      // alert(`${newName} is already added to phonebook`);
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const personToUpdate = persons.find(person => person.name === newName);
+        const updatedPerson = { ...personToUpdate, number: phoneNumber };
+        phonebook
+          .updateNumber(updatedPerson)
+          .then(changedPerson => {
+            setPersons(persons.map(person => person.id !== personToUpdate.id ? person : changedPerson))
+          })
+      }
     }
 
     else {
