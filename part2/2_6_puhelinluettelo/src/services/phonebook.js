@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:3001/api/persons';
+//const baseUrl = 'http://dawn-frost-4895.fly.dev/api/persons';
+//const baseUrl = 'http://localhost:3001/api/persons';
+const baseUrl = '/api/persons';
 
 const getPersons = () => {
     const request = axios.get(baseUrl);
@@ -17,7 +19,7 @@ const deletePerson = id => {
 } 
 
 const updateNumber = updatedPerson => {
-    const url = `http://localhost:3001/persons/${updatedPerson.id}`;
+    const url = `${baseUrl}/${updatedPerson.id}`;
     console.log(updatedPerson.id);
     const request = axios.put(url, updatedPerson);
     return request.then(response => response.data);
