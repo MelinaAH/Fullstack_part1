@@ -18,86 +18,86 @@ const App = () => {
       .then(initialPhonebook => {
         setPersons(initialPhonebook)
       })
-  }, [])
+  }, [persons]);
 
-  const handleSubmit = (newName, phoneNumber) => {
-    if (persons.some(({ name }) => name === newName)) {
-      console.log('Name already exists');
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        const personToUpdate = persons.find(person => person.name === newName);
-        const updatedPerson = { ...personToUpdate, number: phoneNumber };
-        phonebook
-          .updateNumber(updatedPerson)
-          .then(changedPerson => {
-            setPersons(persons.map(person => person.id !== personToUpdate.id ? person : changedPerson))
-            setMessage(`Updated ${updatedPerson.name}`);
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000);
-          })
-          .catch(error => {
-            setSucceeded(false);
-            setMessage(`Information of ${newName} has already been removed from server`);
-            setTimeout(() => {
-              setMessage(null)
-              setSucceeded(true);
-            }, 5000);
-          })
-      }
-    }
-
-    else {
-      console.log('tuleeko tähän?');
-      const nameObject = {
-        name: newName,
-        number: phoneNumber
-      }
-
+const handleSubmit = (newName, phoneNumber) => {
+  if (persons.some(({ name }) => name === newName)) {
+    console.log('Name already exists');
+    if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+      const personToUpdate = persons.find(person => person.name === newName);
+      const updatedPerson = { ...personToUpdate, number: phoneNumber };
       phonebook
-        .createNewPerson(nameObject)
-        .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson));
-          setMessage(`Added ${newName}`);
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000);
+        .updateNumber(updatedPerson)
+        .then(changedPerson => {
+          setPersons(persons.map(person => person.id !== personToUpdate.id ? person : changedPerson))
+          setMessage(`Updated ${updatedPerson.name}`);
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000);
+        })
+        .catch(error => {
+          setSucceeded(false);
+          setMessage(`Information of ${newName} has already been removed from server`);
+          setTimeout(() => {
+            setMessage(null)
+            setSucceeded(true);
+          }, 5000);
         })
     }
   }
 
-  const deletePerson = (id, name) => {
-    console.log('Tuleeko deletePerson funktioon?');
-    console.log(id);
-    phonebook
-      .deletePerson(id)
-    setPersons(persons.filter(person => person.id !== id));
-    setMessage(`Deleted ${name}`);
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000);
-  }
-
-  const handleSearch = (searchCriterion) => {
-    console.log('search crioterion:', searchCriterion);
-    setNameToSearch(searchCriterion);
-    console.log('name to search:', nameToSearch);
-    setShowAll(false);
-    if (searchCriterion === '') {
-      setShowAll(true);
+  else {
+    console.log('tuleeko tähän?');
+    const nameObject = {
+      name: newName,
+      number: phoneNumber
     }
-  }
 
-  return (
-    <div>
-      <h2>Phonebook</h2>
-      <Notification message={message} succeeded={succeeded} />
-      <Filter handleSearch={handleSearch} />
-      <h2>Add a new</h2>
-      <AddPerson handleSubmit={handleSubmit} />
-      <h2>Numbers</h2>
-      <Persons persons={persons} showAll={showAll} nameToSearch={nameToSearch} deletePerson={deletePerson} />
-    </div>
-  )
+    phonebook
+      .createNewPerson(nameObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson));
+        setMessage(`Added ${newName}`);
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000);
+      })
+  }
+}
+
+const deletePerson = (id, name) => {
+  console.log('Tuleeko deletePerson funktioon?');
+  console.log(id);
+  phonebook
+    .deletePerson(id)
+  setPersons(persons.filter(person => person.id !== id));
+  setMessage(`Deleted ${name}`);
+  setTimeout(() => {
+    setMessage(null)
+  }, 5000);
+}
+
+const handleSearch = (searchCriterion) => {
+  console.log('search crioterion:', searchCriterion);
+  setNameToSearch(searchCriterion);
+  console.log('name to search:', nameToSearch);
+  setShowAll(false);
+  if (searchCriterion === '') {
+    setShowAll(true);
+  }
+}
+
+return (
+  <div>
+    <h2>Phonebook</h2>
+    <Notification message={message} succeeded={succeeded} />
+    <Filter handleSearch={handleSearch} />
+    <h2>Add a new</h2>
+    <AddPerson handleSubmit={handleSubmit} />
+    <h2>Numbers</h2>
+    <Persons persons={persons} showAll={showAll} nameToSearch={nameToSearch} deletePerson={deletePerson} />
+  </div>
+)
 }
 
 export default App
