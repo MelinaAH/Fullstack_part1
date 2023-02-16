@@ -2,7 +2,7 @@ import axios from "axios";
 
 //const baseUrl = 'http://dawn-frost-4895.fly.dev/api/persons';
 //const baseUrl = 'http://localhost:3001/api/persons';
-const baseUrl = '/api/persons';
+const baseUrl = '/api/people';
 
 const getPersons = () => {
     const request = axios.get(baseUrl);
