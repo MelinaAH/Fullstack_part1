@@ -38,7 +38,7 @@ const App = () => {
           .catch(error => {
             setSucceeded(false);
             console.log(error.response.data);
-            setMessage(JSON.stringify(error.response.data));
+            setMessage(error.response.data.error);
             setTimeout(() => {
               setMessage(null)
               setSucceeded(true);
@@ -66,7 +66,7 @@ const App = () => {
         .catch(error => {
           setSucceeded(false);
           console.log(error.response.data);
-          setMessage(JSON.stringify(error.response.data));
+          setMessage(error.response.data.error);
           setTimeout(() => {
             setMessage(null)
             setSucceeded(true);
